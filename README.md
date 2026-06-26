@@ -33,6 +33,7 @@ Chion
 ├─ PM to user: plain Chinese, objective mentor tone, business first
 ├─ PM to project: stage, status, risk, next step, user decisions
 ├─ PM to worker: task id, scope, forbidden areas, validation, return packet
+├─ routing gate: pure Q&A / explorer / worker / reviewer / patrol
 ├─ worker discipline: Ponytail-style minimal reliable changes
 └─ reviewer discipline: function check + overengineering check
 ```
@@ -60,8 +61,10 @@ Reviewer: PASS. Lean already. Ship.
 - Speaks to the user in simplified Chinese, plain language, and an objective mentor tone.
 - Explains what the work is useful for before explaining technical actions.
 - Keeps the PM thread thin instead of letting it become a worker.
+- Runs a routing gate before real work: pure Q&A stays with PM; read-only work routes to explorer; writes route to worker; worker output routes to reviewer.
 - Dispatches workers with task ids, explicit scope, no-touch areas, and validation commands.
 - Requires worker return statuses: `DONE`, `BLOCKED`, `NEEDS_PM`, or PM marks the task `UNKNOWN`.
+- Treats `PM-self-exception` as a narrow fallback, not a normal path. If delegation tools are available, write/generation work should not use it.
 - Uses Ponytail-style worker discipline: reuse first, standard library first, native platform first, installed dependencies first, minimal code last.
 - Requires bug fixes to target root cause where possible.
 - Requires reviewers to check both behavior and complexity.
@@ -76,6 +79,16 @@ Copy-Item -Recurse .\skills\chion $env:USERPROFILE\.codex\skills\chion
 ```
 
 Restart Codex after installing.
+
+## Verify
+
+Run the repository-level verifier after edits:
+
+```powershell
+.\tools\verify-chion.ps1
+```
+
+The verifier checks the required Skill files, routing-gate rules, no-silent-completion rules, UI metadata, and the official `quick_validate.py` result when available.
 
 ## Use
 
@@ -152,6 +165,8 @@ Ponytail-review 发现：
 │   ├── pm-handoff.md
 │   ├── reviewer-verdict.md
 │   └── worker-dispatch.md
+├── tools/
+│   └── verify-chion.ps1
 └── skills/
     └── chion/
         ├── SKILL.md

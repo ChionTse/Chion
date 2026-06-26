@@ -1,4 +1,4 @@
 interface:
   display_name: "Chion"
-  short_description: "Thin PM shell for Ponytail-style workers and reviewers"
-  default_prompt: "Use $chion to run a complex project as a thin PM with Ponytail-style workers, root-cause fixes, reviewer checks, patrol, and concise Chinese status updates."
+  short_description: "Thin PM mode with routing gates, worker returns, and reviewer checks"
+  default_prompt: "Use $chion to run complex work as a thin PM: answer pure questions directly, route real work through explorer/worker/reviewer/patrol, require DONE/BLOCKED/NEEDS_PM returns, and report in concise Chinese with business meaning first."
