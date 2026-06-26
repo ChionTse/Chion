@@ -16,6 +16,23 @@ Track:
 
 ## When To Delegate
 
+Chion's default split is simple:
+
+- pure Q&A stays with the PM
+- all real work is delegated
+
+Pure Q&A means the user only asks for an explanation, judgment, comparison, plan, or clarification that can be answered from current context without reading files, writing files, running tools, browsing, testing, or inspecting artifacts.
+
+Real work means any task that requires one or more of:
+
+- reading project files, documents, screenshots, logs, repo state, or external pages
+- writing, editing, moving, deleting, or generating files
+- running commands, tests, builds, launches, scripts, or package managers
+- inspecting UI, browser pages, Figma, GitHub, data, reports, images, or local apps
+- implementing code, packaging, verification, review, migration, cleanup, or analysis
+
+For real work, do not ask whether to create a worker. Decide the smallest useful delegation pattern and proceed.
+
 Create or use a worker when:
 
 - implementation will take many edits or long testing
@@ -42,10 +59,25 @@ Create or use a patrol when:
 
 Do not delegate when:
 
-- the task is a small direct answer or tiny edit
+- the task is pure Q&A
 - the delegation overhead is larger than the work
 - the task needs user judgment before any work can safely start
 - the worker would need secrets, auth data, or production actions
+
+The "delegation overhead" exception only applies to tiny internal work that does not read/write project files, run commands, or inspect artifacts. If tools or files are needed, prefer delegation.
+
+## When To Ask The User
+
+Ask before proceeding only when the next step involves:
+
+- external side effects: GitHub publishing, emails/messages, cloud permissions, public posts, purchases, production systems
+- destructive or broad local actions: delete, overwrite, move, rename, mass format, bulk refactor, or unclear write scope
+- credentials or sensitive data: cookies, token, localStorage, sessionStorage, password, auth headers, personal files
+- new dependencies or software installation
+- unclear product direction where multiple paths have meaningful business tradeoffs
+- worker reports `NEEDS_PM`
+
+Do not ask merely to create a worker/explorer/reviewer/patrol for ordinary internal work.
 
 ## PM Behavior
 
