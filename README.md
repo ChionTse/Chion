@@ -90,6 +90,12 @@ Run the repository-level verifier after edits:
 
 The verifier checks the required Skill files, routing-gate rules, no-silent-completion rules, UI metadata, and the official `quick_validate.py` result when available.
 
+The current pressure-test set also includes Ponytail worker checks:
+
+- root-cause fix at the shared entry point by reusing an existing helper
+- standard-library fix instead of adding a dependency or service layer
+- reviewer confirmation that the diff is lean and does not overbuild
+
 ## Use
 
 Invoke it directly:
