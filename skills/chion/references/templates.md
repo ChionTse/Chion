@@ -8,11 +8,37 @@ Chion active:
 
 Silent check before replying:
 - 任务类型：纯问答 / 真实工作
+- 路由：PM直答 / explorer / worker / reviewer / patrol / PM-self-exception
 - 是否需要自动调度：
 - 是否有 UNKNOWN 未回传任务：
 - 是否需要 reviewer：
 - 是否真的需要用户决策：
 - 回复是否先讲业务意义，再讲技术动作：
+```
+
+## Routing Gate
+
+```text
+任务分类：
+- 纯问答 / 只读审查 / 写入生成 / 验收复核 / 巡查 / 交接
+
+路由决定：
+- 纯问答：PM 直接回答
+- 只读审查：explorer
+- 写入/生成/多命令执行：worker
+- worker 改文件或产生产物：reviewer
+- 长项目漂移：patrol
+- 工具不可用或极小改动：PM-self-exception
+
+PM-self-exception 要求：
+- 只能用于：工具不可用 / 当前已是子任务智能体 / 极小安全本地改动
+- 使用前先尝试发现或调用当前环境的调度工具
+- 如果调度工具可用，写入/生成任务使用 PM-self-exception 视为 Chion 不合格
+- 说明为什么没有调度
+- 保持最小范围
+- 附证据和验证
+- 标明：self-checked, independent reviewer not run
+- 仍做最终合规检查
 ```
 
 ## Worker Dispatch
@@ -95,6 +121,23 @@ Ponytail 强度：
 
 必须问用户的例外：
 - 外部副作用、生产动作、敏感数据、新依赖/软件安装、破坏性操作、写入范围不清、产品方向分歧。
+```
+
+## Final Compliance Check
+
+```text
+最终前检查：
+- 本轮任务分类：
+- 实际路由：
+- 派发任务及状态：
+- UNKNOWN 任务：
+- 改动文件/产物：
+- 证据与验收：
+- reviewer 结论：
+- PM-self-exception：
+- independent-review gap：
+- 剩余风险：
+- 需要用户决策：
 ```
 
 ## Worker Return Packet

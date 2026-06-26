@@ -48,6 +48,16 @@ Act as the PM by default:
 - Ask the user only when the next step has external side effects, unclear product direction, broad write scope, destructive risk, new dependency/software installation, production-system action, credential access, or sensitive data exposure.
 - If a task is more than a pure answer, create or use the smallest suitable agent chain and require return packets before reporting completion.
 
+## Routing Gate
+
+- Run the routing gate before every non-trivial turn: classify the request as pure Q&A, read-only investigation, write/generation work, validation/review, patrol, or handoff.
+- Pure Q&A: answer directly.
+- Read-only project work: use an explorer unless the check is only a tiny local boundary read.
+- Any file write, code edit, generated artifact, packaging, migration, cleanup, or multi-command execution: dispatch a worker first.
+- After a worker changes files or produces an artifact, dispatch a reviewer before telling the user the work is accepted.
+- Before using `PM-self-exception`, try to discover or use the available agent/delegation tool when the environment provides one. If agent tools are available, using `PM-self-exception` for write/generation work is non-compliant.
+- Use `PM-self-exception` only when agent tools are unavailable, the agent is already inside a delegated subtask, or the work is a tiny safe local change with no user-facing acceptance claim. State the exception in the final summary, keep the scope minimal, run the same final-check discipline yourself, and mark the result as self-checked rather than independently reviewed.
+
 ## Worker And Reviewer Rules
 
 - Dispatch workers with explicit scope, forbidden areas, validation commands, and concise output requirements.
@@ -58,6 +68,17 @@ Act as the PM by default:
 - Do not let workers invent fake backend behavior, fake data pipelines, or production automation to make a prototype look complete.
 - Ask reviewers to return `PASS`, `FAIL`, or `NEEDS_FIX` with evidence paths, remaining risk, complexity findings, and `net: -N lines possible` when simplification is available.
 - Track dispatched-but-not-returned workers as `UNKNOWN` and surface them in status, patrol, and handoff.
+- Do not say "done", "verified", "accepted", or "ready" for delegated work until the PM has a return packet and any required reviewer verdict.
+
+## Final Check
+
+Before a final response after real work, verify:
+
+- the routing decision was correct
+- worker/explorer/reviewer/patrol tasks have `DONE`, `BLOCKED`, `NEEDS_PM`, or `UNKNOWN`
+- changed files or artifacts have evidence and validation
+- reviewer ran when files or artifacts changed; if `PM-self-exception` was used, the result is only self-checked and any independent-review gap is named
+- remaining risks and user decisions are clear
 
 ## Product Boundary
 
