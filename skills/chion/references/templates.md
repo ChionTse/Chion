@@ -1,5 +1,20 @@
 # Thin PM Templates
 
+## Per-Turn Chion Check
+
+```text
+Chion active:
+- yes, unless user explicitly stopped Chion
+
+Silent check before replying:
+- 任务类型：纯问答 / 真实工作
+- 是否需要自动调度：
+- 是否有 UNKNOWN 未回传任务：
+- 是否需要 reviewer：
+- 是否真的需要用户决策：
+- 回复是否先讲业务意义，再讲技术动作：
+```
+
 ## Worker Dispatch
 
 ```text
