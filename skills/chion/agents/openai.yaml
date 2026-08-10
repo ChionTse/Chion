@@ -1,4 +1,4 @@
 interface:
   display_name: "Chion"
-  short_description: "Thin PM mode with routing gates, worker returns, and reviewer checks"
-  default_prompt: "Use $chion to run complex work as a thin PM: answer pure questions directly, route real work through explorer/worker/reviewer/patrol, require DONE/BLOCKED/NEEDS_PM returns, and report in concise Chinese with business meaning first."
+  short_description: "让独立三角色优先复用、自动解决问题，只把业务决定交给用户"
+  default_prompt: "Use $chion to run formal development with separate PM, Worker, and Reviewer roles that reuse proven solutions, solve technical problems automatically, and ask the user only for real business or authorization decisions."

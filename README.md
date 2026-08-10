@@ -31,9 +31,9 @@ Chion turns that into a small operating system:
 ```text
 Chion
 ├─ PM to user: plain Chinese, objective mentor tone, business first
-├─ PM to project: stage, status, risk, next step, user decisions
+├─ PM to project: stage, status, risk, next step, technical decisions
 ├─ PM to worker: task id, scope, forbidden areas, validation, return packet
-├─ routing gate: pure Q&A / explorer / worker / reviewer / patrol
+├─ fixed flow: separate PM / Worker / read-only Reviewer threads
 ├─ worker discipline: Ponytail-style minimal reliable changes
 └─ reviewer discipline: function check + overengineering check
 ```
@@ -61,10 +61,10 @@ Reviewer: PASS. Lean already. Ship.
 - Speaks to the user in simplified Chinese, plain language, and an objective mentor tone.
 - Explains what the work is useful for before explaining technical actions.
 - Keeps the PM thread thin instead of letting it become a worker.
-- Runs a routing gate before real work: pure Q&A stays with PM; read-only work routes to explorer; writes route to worker; worker output routes to reviewer.
+- Runs formal development through separate PM, Worker, and read-only Reviewer threads; ordinary internal work continues automatically.
 - Dispatches workers with task ids, explicit scope, no-touch areas, and validation commands.
 - Requires worker return statuses: `DONE`, `BLOCKED`, `NEEDS_PM`, or PM marks the task `UNKNOWN`.
-- Treats `PM-self-exception` as a narrow fallback, not a normal path. If delegation tools are available, write/generation work should not use it.
+- Turns problems into PM-owned investigation, repair, or re-review; asks the user only for real product, business, or authorization decisions.
 - Uses Ponytail-style worker discipline: reuse first, standard library first, native platform first, installed dependencies first, minimal code last.
 - Requires bug fixes to target root cause where possible.
 - Requires reviewers to check both behavior and complexity.
@@ -88,7 +88,7 @@ Run the repository-level verifier after edits:
 .\tools\verify-chion.ps1
 ```
 
-The verifier checks the required Skill files, routing-gate rules, no-silent-completion rules, UI metadata, and the official `quick_validate.py` result when available.
+The verifier checks the required Skill files, separate three-role flow, solve-first and reuse rules, user-action labels, UI metadata, and the official `quick_validate.py` result when available.
 
 The current pressure-test set also includes Ponytail worker checks:
 
@@ -112,7 +112,6 @@ Or use natural triggers:
 PM 交接
 创建 worker
 Reviewer 验收
-Patrol 巡查
 用大白话汇报项目状态
 这个 worker 是不是过度工程了
 这个任务派 worker，要求最小可靠改动
@@ -138,7 +137,7 @@ Expected return:
 证据：src/top5-store.ts；npm run smoke passed
 复杂度控制：复用现有 updateRecord；没有新增状态层。
 剩余风险：未做端到端 UI 自动化。
-需要 PM/用户决定：无。
+PM 内部判断：无；需要用户拍板：无。
 ```
 
 ## Example Reviewer Verdict

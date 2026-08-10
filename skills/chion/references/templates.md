@@ -1,289 +1,149 @@
-# Thin PM Templates
+# Chion Templates
 
-## Per-Turn Chion Check
+只使用当前动作需要的模板，不要把整份模板复制进线程。
 
-```text
-Chion active:
-- yes, unless user explicitly stopped Chion
+## PM 派发 Worker
 
-Silent check before replying:
-- 任务类型：纯问答 / 真实工作
-- 路由：PM直答 / explorer / worker / reviewer / patrol / PM-self-exception
-- 是否需要自动调度：
-- 是否有 UNKNOWN 未回传任务：
-- 是否需要 reviewer：
-- 是否真的需要用户决策：
-- 回复是否先讲业务意义，再讲技术动作：
-```
+    任务ID：
+    角色：你是本阶段唯一 Worker，只负责实施；不能兼任 PM 或 Reviewer，不能创建或安排下级角色。
 
-## Routing Gate
+    业务目标：
+    项目目录：
+    当前有效依据：
+    写入范围：
+    禁区：
+    完整验收标准：
+    允许的自检命令：
 
-```text
-任务分类：
-- 纯问答 / 只读审查 / 写入生成 / 验收复核 / 巡查 / 交接
+    执行要求：
+    - 先追踪当前模块和真实流程，再查同项目成熟实现与共享能力。
+    - 再查标准库、平台原生能力、已安装依赖和当前权威资料；确认不能复用后，才做最小新实现。
+    - 修共同根因；不加无用依赖、抽象、配置或未来功能。
+    - 不牺牲安全、数据保护、错误处理和必要验证。
+    - 完成后只回传 PM；DONE 只表示已交付待验收。
 
-路由决定：
-- 纯问答：PM 直接回答
-- 只读审查：explorer
-- 写入/生成/多命令执行：worker
-- worker 改文件或产生产物：reviewer
-- 长项目漂移：patrol
-- 工具不可用或极小改动：PM-self-exception
+    回传：DONE / BLOCKED / NEEDS_PM，并附改动、查找与复用、自检、未做事项和风险。
 
-PM-self-exception 要求：
-- 只能用于：工具不可用 / 当前已是子任务智能体 / 极小安全本地改动
-- 使用前先尝试发现或调用当前环境的调度工具
-- 如果调度工具可用，写入/生成任务使用 PM-self-exception 视为 Chion 不合格
-- 说明为什么没有调度
-- 保持最小范围
-- 附证据和验证
-- 标明：self-checked, independent reviewer not run
-- 仍做最终合规检查
-```
+## Worker 回传 PM
 
-## Worker Dispatch
+    任务ID：
+    状态：DONE / BLOCKED / NEEDS_PM
 
-```text
-角色：你是本任务 worker，只做执行，不扩大战场。
+    完成了什么：
+    改动文件：
+    查过什么：
+    复用了什么：
+    新增内容为何不可缺少：
+    没做什么及原因：
+    自检命令与结果：
+    证据：
+    剩余风险：
+    建议 PM 的内部下一步：
+    真正需要用户拍板：无 / 一个业务或授权问题
 
-任务ID：
-- 
+## PM 派发 Reviewer
 
-目标：
-- 
+    任务ID：
+    角色：你是本阶段唯一 Reviewer，与 PM、Worker 独立；只读验收，绝对不能修改，也不能创建或安排下级角色。
 
-写入范围：
-- 
+    验收目标：
+    适用版本或产物：
+    Worker 改动：
+    Worker 证据：
+    当前有效依据：
+    验收标准：
+    允许的只读检查：
+    禁区：
 
-Ponytail 强度：
-- full（默认）/ lite / ultra：
+    必查：
+    - 功能是否符合目标
+    - 证据是否足够且范围没有夸大
+    - 是否守住安全和产品边界
+    - 是否修到共同根因
+    - 是否按顺序查找并优先复用了成熟方案
+    - 是否存在可避免的依赖、抽象、配置、文件、重复逻辑或未来功能
 
-执行纪律：
-- 先理解任务和真实调用/交互流程，再追求最小改动。
-- 先判断是否真的需要改；不需要改就说明原因。
-- 先找现有 helper、状态名、组件、测试、调用方、项目惯例。
-- 如果是 bug fix，先查相关调用方/入口，优先在共同根因处修，不只补一个表面路径。
-- 优先复用现有代码、标准库、平台原生能力、已安装依赖。
-- 写最小可靠改动，不为未来需求加抽象、配置、依赖、框架。
-- 不为了“看起来完整”补假后端、假数据流、假生产能力。
-- 不省掉必要安全、边界、数据保护、可访问性、错误处理。
+    只向 PM 回传 PASS / NEEDS_FIX / FAIL，并使用下面的完整结论模板；不得修改，也不得把问题交给用户。
 
-禁区：
-- 不读取或输出 auth.json、cookies、token、localStorage、sessionStorage、password、auth headers。
-- 不修改 AGENTS.md，除非用户本轮明确要求。
-- 不碰打包产物、node_modules、历史快照，除非本任务明确要求。
+## Reviewer 回传 PM
 
-背景文件优先级：
-- AGENTS.md
-- PM_STATE.md
-- BOUNDARY.md / README.md
-- 当前目标目录里的 PRD、spec、manifest
+    任务ID：
+    结论：PASS / NEEDS_FIX / FAIL
+    独立且全程只读：是 / 否
+    适用版本或产物：
 
-验收命令：
-- 
+    证明了什么：
+    没证明什么：
+    证据路径或命令：
+    环境与数据级别：静态 / 离线 / 本地集成 / 真实数据 / 生产
+    功能与边界结论：
+    成熟方案复用结论：
+    Ponytail 结论：
+    可删除或应复用的内容：
+    问题：
+    建议 PM 的返修或复验动作：
+    剩余风险：
 
-回传要求：
-- 完成后必须回传给 PM。
-- 回传状态只能是 DONE / BLOCKED / NEEDS_PM。
-- 没有证据路径或验收结果，不算 DONE。
+    注意：静态、离线或本地 PASS 不能写成真实链路或生产可用。
 
-输出格式：
-- 任务ID：
-- 状态：DONE / BLOCKED / NEEDS_PM
-- 改了什么：
-- 复用了什么：
-- 没有做什么以及原因：
-- 证据路径：
-- 验收结果：
-- 复杂度控制：
-- 剩余风险：
-- 需要 PM/用户决定：
+## PM 安排返修
 
-输出要短：先给结果和证据，再给必要风险；不要粘贴长篇调查过程。
-```
+    原任务ID：
+    返修轮次：1 / 2
+    Worker：继续使用原 Worker
+    Reviewer：返修后仍交原 Reviewer
+    Reviewer 问题与证据：
+    PM 判断的下一步：调查 / 返修 / 补证据 / 复验
+    本轮必须修复：
+    原范围不变：
+    验收命令：
 
-## Delegation Decision
+第二轮仍不过或没有新增证据时，停止机械返修，由 PM 重判根因、范围或验收方法；除非涉及业务或授权拍板，否则继续内部处理，不等待用户。
 
-```text
-任务类型：
-- 纯问答 / 真实工作
+## 短状态与换线交接
 
-判断：
-- 纯问答：PM 直接回答。
-- 真实工作：自动调度 explorer / worker / reviewer / patrol，不问“是否创建 worker”。
+    接替角色：PM / Worker / Reviewer
+    旧线程已停止：是 / 否
+    项目与准确目录：
+    业务目标：
+    当前阶段：第 N / M 阶段
+    当前工作块：
+    已确认：
+    风险或缺口：
+    当前有效依据：
+    已作废或 STALE：
+    最近 Worker 状态与证据：
+    最近 Reviewer 结论、范围与版本：
+    UNKNOWN：
+    下一步：
+    用户行动：无需 / 需要拍板的唯一事项
 
-真实工作包括：
-- 读取文件或网页
-- 写入/生成/移动/删除文件
-- 运行命令、测试、构建、启动应用
-- 检查 UI、GitHub、Figma、图片、数据、报告
-- 实现、验证、打包、清理、迁移、分析
+只交接当前有效内容和必要证据指针，不复制完整聊天历史。
 
-必须问用户的例外：
-- 外部副作用、生产动作、敏感数据、新依赖/软件安装、破坏性操作、写入范围不清、产品方向分歧。
-```
+## 用户状态
 
-## Final Compliance Check
+无需用户操作时：
 
-```text
-最终前检查：
-- 本轮任务分类：
-- 实际路由：
-- 派发任务及状态：
-- UNKNOWN 任务：
-- 改动文件/产物：
-- 证据与验收：
-- reviewer 结论：
-- PM-self-exception：
-- independent-review gap：
-- 剩余风险：
-- 需要用户决策：
-```
+    【你无需操作】当前状态：正在推进 / 已完成 / 等待外部条件（如实选择并说明）
+    业务意义：
+    当前阶段：
+    已确认：
+    风险/缺口：
+    下一步：
 
-## Worker Return Packet
+确实需要用户拍板时：
 
-```text
-任务ID：
-状态：DONE / BLOCKED / NEEDS_PM
+    【需要你拍板】请决定：一个业务或授权问题
+    推荐：
+    理由：
+    选择影响：
+    当前阶段与已确认：
+    等待决定前不能安全继续的原因：
 
-结果：
-- 
+不能明确写出用户要决定什么时，不得使用第二个模板；继续所有安全内部工作，确实只剩外部条件时，明确等待内容和恢复条件。
 
-证据：
-- 路径或命令：
-- 结果：
+## 硬停
 
-复杂度控制：
-- 复用：
-- 跳过：
+    PAUSED
 
-剩余风险：
-- 
-
-需要 PM/用户决定：
-- 
-```
-
-## Explorer Dispatch
-
-```text
-角色：你是 explorer，只读调查，不写文件。
-
-任务ID：
-- 
-
-问题：
-- 
-
-调查范围：
-- 
-
-不要做：
-- 不读取或输出任何认证、cookie、token、本地存储、密码、auth header。
-- 不跑长测试，不改代码。
-
-输出格式：
-- 任务ID：
-- 状态：DONE / BLOCKED / NEEDS_PM
-- 结论：
-- 关键证据路径：
-- 推荐下一步：
-- 不确定点：
-```
-
-## Reviewer Verdict
-
-```text
-任务ID：
-
-结论：PASS / FAIL / NEEDS_FIX
-
-功能证据：
-- 路径或命令：
-- 看到的结果：
-
-复杂度验收：
-- 是否复用了现有模式：
-- 是否新增不必要抽象/依赖/配置：
-- 是否有可删除或可缩小的改动：
-- 是否做了超出当前需求的未来功能：
-
-Ponytail-review 发现：
-- delete:
-- stdlib:
-- native:
-- yagni:
-- shrink:
-- net: -N lines possible / Lean already. Ship.
-
-问题：
-- 
-
-剩余风险：
-- 
-
-建议：
-- 
-```
-
-Use `PASS` only when the requested scope is satisfied, evidence is concrete, root cause is addressed when relevant, and complexity is justified. Use `NEEDS_FIX` when the direction is right but behavior, evidence, scope, root-cause placement, or complexity needs correction. Use `FAIL` when the work misses the goal, violates boundaries, overbuilds in a way that cannot be trusted, or cannot be verified.
-
-## Patrol Check
-
-```text
-巡查目标：
-- 
-
-检查项：
-- PM 是否仍在调度而不是变 worker：
-- 当前阶段是否清楚：
-- 风险是否被记录：
-- 已派发 worker 是否都有 DONE / BLOCKED / NEEDS_PM 回传：
-- 是否存在 UNKNOWN 未回传任务：
-- worker/reviewer 输出是否有证据：
-- worker 是否遵守最小可靠改动：
-- bug fix 是否修根因而不是补症状：
-- reviewer 是否同时验功能和复杂度：
-- reviewer 是否给出 ponytail-review 标签或 Lean already：
-- 是否越过产品边界或触碰禁区：
-
-输出：
-- 健康度：OK / WATCH / RISK
-- 发现：
-- UNKNOWN 任务：
-- 建议下一步：
-```
-
-## Handoff
-
-```text
-业务意义：
-当前阶段：
-目标目录：
-已完成：
-未完成：
-关键证据：
-已派发未回传：
-风险/禁区：
-下一步：
-需要用户决定：
-```
-
-Keep handoff concise. Do not paste full history. Point the next agent to current state files and evidence paths.
-
-## Lost-Context Recovery
-
-```text
-先读：
-1. AGENTS.md
-2. PM_STATE.md
-3. BOUNDARY.md
-4. README.md
-5. 最新目标目录和用户本轮指定文件
-
-不要默认做：
-- 翻全量历史对话
-- 扫所有旧原型目录
-- 读取运行态认证数据
-- 用猜测替代边界文件
-```
+用户明确恢复前，不添加调查、解释、修改或验证。
