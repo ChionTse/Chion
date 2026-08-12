@@ -29,7 +29,7 @@ Formal development runs in separate PM / Worker / read-only Reviewer threads:
 | Reviewer | Checks behavior, evidence, boundaries, and unnecessary complexity | Read-only; never edits or directs the Worker |
 
 ```text
-PM sets the goal and boundaries
+PM locks the agreed goal and boundaries
   → Worker implements, checks, and returns evidence
   → PM sends the result to the Reviewer
   → Reviewer returns PASS / NEEDS_FIX / FAIL to the PM
@@ -66,8 +66,6 @@ Every user update starts with one clear action label, followed by the truthful c
 【你无需操作】正在推进 / 已完成 / 等待外部条件
 【需要你拍板】一个明确的产品、业务或授权决定
 ```
-
-When a split is useful in a return packet: `PM 内部判断：无；需要用户拍板：无。`
 
 ## Long-Task Protection
 
@@ -119,7 +117,7 @@ Natural requests such as “use a thin PM,” “create a Worker,” “run an i
 User: Add export to this product.
 
 PM: 【你无需操作】Checking existing export paths and boundaries.
-Worker: DONE. Reused the shared exporter; one bounded change; local check passed.
+Worker: DONE. Reused the shared exporter; one bounded change; local check passed. PM 内部判断：无；需要用户拍板：无。
 Reviewer: NEEDS_FIX. The offline error case is not yet proved.
 PM: Sends the evidence gap back to the same Worker; the user does not need to solve it.
 Worker: DONE. Added the missing check without a new dependency.
